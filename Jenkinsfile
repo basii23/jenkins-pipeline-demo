@@ -17,16 +17,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "Building the project..."
-                // Replace this with the actual build commands, e.g., for Maven/Gradle
+                echo "Building the project with Maven..."
                 sh 'mvn clean package'
             }
         }
 
         stage('Unit and Integration Tests') {
             steps {
-                echo "Running Unit and Integration Tests..."
-                // Add commands to run tests, e.g., using JUnit/TestNG
+                echo "Running Unit and Integration Tests using Maven..."
                 sh 'mvn test'
             }
         }
@@ -34,41 +32,34 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 echo "Performing code analysis using SonarQube..."
-                // Replace this with SonarQube analysis command
-                sh 'sonar-scanner'
+                sh 'sonar-scanner -Dsonar.projectKey=your-project-key -Dsonar.host.url=http://your-sonarqube-server:9000 -Dsonar.login=your-token'
             }
         }
 
         stage('Security Scan') {
             steps {
-                echo "Running security scan..."
-                // Replace with security scan command, e.g., OWASP Dependency-Check or Snyk
-                sh 'dependency-check --project your-project --scan ./'
+                echo "Running security scan with OWASP Dependency Check..."
+                sh 'dependency-check --project "your-project-name" --scan ./'
             }
         }
 
         stage('Deploy to Staging') {
             steps {
-                echo "Deploying to Staging Environment"
-                // Replace this with your deployment command for staging (e.g., AWS CLI, Docker)
-                // Example for AWS:
+                echo "Deploying to Staging Environment using AWS CLI..."
                 sh 'aws deploy create-deployment --application-name YourApp --deployment-group StagingGroup'
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
-                echo "Running integration tests in Staging..."
-                // Add your integration test commands, e.g., Selenium, Postman
+                echo "Running integration tests in Staging using Newman..."
                 sh 'newman run your-postman-collection.json'
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo "Deploying to Production Environment"
-                // Replace this with your production deployment command (e.g., AWS CLI, Docker)
-                // Example for AWS:
+                echo "Deploying to Production Environment using AWS CLI..."
                 sh 'aws deploy create-deployment --application-name YourApp --deployment-group ProductionGroup'
             }
         }
@@ -92,4 +83,3 @@ pipeline {
         }
     }
 }
-
